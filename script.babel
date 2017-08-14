@@ -1,0 +1,49 @@
+const sampleText = 'Heading\n=======\nSub-heading\n-----------\n### Another deeper heading\nParagraphs are separated\nby a blank line.\n\nLeave 2 spaces at the end of a line to do a  \n\nline break\n\n> Block quotes are\n> written like so.\n>\n> They can span multiple paragraphs,\n> if you like.\n\nText attributes *italic*, **bold**, \n`monospace`,\n~~strikethrough~~ .\n\nShopping list:\n * apples\n * oranges\n * pears\n\nNumbered list:\n  1. apples\n  2. oranges\n  3. pears\n\nThe rain---not the reign---in\nSpain.\n\n *Made by * **[Trang Tran](https://github.com/trangtmtran)**'
+
+class App extends React.Component {
+  render() {
+    return (
+      <div className="container-fluid">
+        <h1 className="heading">MarkDown Previewer</h1>
+        <MarkDown />
+      </div>
+    )
+  }
+}
+class MarkDown extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      input: sampleText
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.createMarkup = this.createMarkup.bind(this);
+  }
+  
+  handleChange(event) {
+    this.setState({
+      input: event.target.value
+    });
+  }
+  
+  createMarkup() {
+    return { __html: marked(this.state.input) }
+  }
+  
+  render() {
+    return(
+        <div className="wrapper">
+          <div className="input">
+            <h3>Input</h3>
+            <textarea onChange={this.handleChange} value={this.state.input}></textarea>
+          </div>
+          <div className="rendered">
+            <h3>Mark it up!</h3>
+            <div dangerouslySetInnerHTML={this.createMarkup()}></div>
+          </div>
+        </div>
+    )
+  }
+};
+
+ReactDOM.render(<App />, document.getElementById('react-render'))
